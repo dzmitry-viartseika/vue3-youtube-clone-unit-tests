@@ -12,5 +12,5 @@ test('renders base button', () => {
     render(BaseButton, options);
 
     // then (assets) проверяем действительное с ожидаемым
-    screen.getByText('Test');
+    screen.getByText('Test Button');
 })
