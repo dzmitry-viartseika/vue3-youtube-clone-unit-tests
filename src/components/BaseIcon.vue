@@ -13,7 +13,11 @@
 import icons from '../icons'
 
 export default {
-  props: ['name'],
+  props: {
+    name: {
+      type: String,
+    }
+  },
 
   data () {
     return {
