@@ -13,7 +13,7 @@ test('renders base icon', () => {
     // then (assets)
     screen.debug();
     const component = screen.getByTestId('base-icon');
-    expect(component.innerHTML).toBeFalsy();
+    expect(component.innerHTML).toBeTruthy();
 });
 
 test('renders base icon no-exist icon', () => {
