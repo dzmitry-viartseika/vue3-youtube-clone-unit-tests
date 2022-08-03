@@ -101,7 +101,7 @@ test('check closing after clicking on overlay', async () => {
     ])
 })
 
-test.only('check modal when clicking cancel button in the footer side', async () => {
+test('check modal when clicking cancel button in the footer side', async () => {
 
     const bodySlot = 'This is slot of body';
 
@@ -119,6 +119,25 @@ test.only('check modal when clicking cancel button in the footer side', async ()
 
     const button = screen.getByRole('button', { name: 'Cancel' });
     await fireEvent.click(button);
+
+    screen.queryByText(bodySlot);
+    screen.queryByTestId('base-modal-overlay');
+})
+
+test.only('check modal when pressing the key of esc', async () => {
+
+    const bodySlot = 'This is slot of body';
+
+    const options = {
+        slots: {
+            default: bodySlot,
+        }
+    }
+
+    render(BaseModal, options);
+
+    const button = screen.getByRole('dialog', { key: 'Esc' });
+    await fireEvent.keyDown(button);
 
     screen.queryByText(bodySlot);
     screen.queryByTestId('base-modal-overlay');
