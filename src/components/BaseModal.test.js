@@ -1,4 +1,4 @@
-import { screen, render, fireEvent } from '@testing-library/vue';
+import {screen, render, fireEvent, waitFor, waitForElementToBeRemoved } from '@testing-library/vue';
 import BaseModal from './BaseModal.vue';
 import icons from '../icons.js';
 
@@ -43,7 +43,7 @@ test('renders close button without conditional', () => {
     expect(screen.queryByTestId('base-icon').innerHTML).toBeNull();
 })
 
-test.only('modal form should close after click close icon', async () => {
+test('modal form should close after click close icon', async () => {
     const bodySlot = 'This is slot of body';
 
     const options = {
@@ -58,7 +58,68 @@ test.only('modal form should close after click close icon', async () => {
     render(BaseModal, options);
 
     const button = screen.getByTestId('base-modal-button-close');
+    // await fireEvent.click(button);
+
+    // or
+
+    // fireEvent.click(button);
+    //
+    // await waitFor(() => {
+    //     expect(screen.queryByText(bodySlot)).toBeNull();
+    //     expect(screen.queryByTestId('base-modal-overlay')).toBeNull();
+    // })
+
+    // or
+
+    fireEvent.click(button);
+
+    await waitForElementToBeRemoved([
+        screen.queryByText(bodySlot),
+        screen.queryByTestId('base-modal-overlay'),
+    ])
+})
+
+
+test('check closing after clicking on overlay', async () => {
+
+    const bodySlot = 'This is slot of body';
+
+    const options = {
+        slots: {
+            default: bodySlot,
+        }
+    }
+
+    render(BaseModal, options);
+
+    const overlay = screen.getByTestId('base-modal-overlay');
+    fireEvent.click(overlay);
+
+    await waitForElementToBeRemoved([
+        screen.queryByText(bodySlot),
+        screen.queryByTestId('base-modal-overlay'),
+    ])
+})
+
+test.only('check modal when clicking cancel button in the footer side', async () => {
+
+    const bodySlot = 'This is slot of body';
+
+    const options = {
+        slots: {
+            default: bodySlot,
+            footer:
+                `<template #footer="{ close }"> 
+                    <button>Cancel</button>
+                </template>`
+        }
+    }
+
+    render(BaseModal, options);
+
+    const button = screen.getByRole('button', { name: 'Cancel' });
     await fireEvent.click(button);
-    expect(screen.queryByText(bodySlot)).toBeNull();
-    expect(screen.queryByTestId('base-modal-overlay')).toBeNull();
+
+    screen.queryByText(bodySlot);
+    screen.queryByTestId('base-modal-overlay');
 })
