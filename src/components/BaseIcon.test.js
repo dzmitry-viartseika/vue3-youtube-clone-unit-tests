@@ -1,23 +1,27 @@
 import { render, screen } from '@testing-library/vue';
 import BaseIcon from './BaseIcon';
 
-test('renders base icon', () => {
-    // given (arrange)
+const DEFAULT_ICON = 'menu'
+
+function renderIcon(name = null, classes = null) {
     const options = {
         props: {
-            name: 'menu',
+            name,
+            class: classes,
         },
     }
-    // when (act)
-    const icon = render(BaseIcon, options);
-    // then (assets)
-    screen.debug();
+
+    return render(BaseIcon, options);
+}
+
+test('renders base icon', () => {
+    renderIcon(DEFAULT_ICON);
     const component = screen.getByTestId('base-icon');
     expect(component.innerHTML).toBeTruthy();
 });
 
 test('renders base icon no-exist icon', () => {
-    const icon = render(BaseIcon);
+    renderIcon();
     const component = screen.getByTestId('base-icon');
     expect(component.innerHTML).toBeFalsy();
 })
@@ -26,28 +30,17 @@ test('renders base icon no-exist icon', () => {
 test('rendes base icon with default classes', () => {
     const defaultClasses = 'w-6 h-6';
 
-    const options = {
-        props: {
-            name: 'menu',
-        },
-    };
+    renderIcon(DEFAULT_ICON, defaultClasses);
 
-    render(BaseIcon, options);
     const component = screen.getByTestId('base-icon');
     expect(component.getAttribute('class')).toBe(defaultClasses);
 });
 
 test('rendes base icon with custom classes', () => {
-    const classes = 'w-10 h-100';
+    const expectedClasses = 'w-10 h-100';
 
-    const options = {
-        props: {
-            name: 'menu',
-            class: classes,
-        },
-    };
+    renderIcon(DEFAULT_ICON, expectedClasses);
 
-    render(BaseIcon, options);
     const component = screen.getByTestId('base-icon');
-    expect(component.getAttribute('class')).toBe(classes);
+    expect(component.getAttribute('class')).toBe(expectedClasses);
 });
