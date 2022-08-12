@@ -1,4 +1,4 @@
-import { render, screen, } from '@testing-library/vue';
+import { render, screen, fireEvent } from '@testing-library/vue';
 import BaseTooltip from './BaseTooltip';
 
 function renderTooltip(text, element = '') {
@@ -14,7 +14,7 @@ function renderTooltip(text, element = '') {
 }
 
 
-it.only('renders hidden with specified text', () => {
+it('renders hidden with specified text', () => {
     const text = 'Tooltip text';
 
     renderTooltip(text);
@@ -22,10 +22,22 @@ it.only('renders hidden with specified text', () => {
     expect(screen.getByText(text)).not.toBeVisible();
 })
 
-it.only('renders with target element', () => {
+it('renders with target element', () => {
     const buttonLabel = 'Click me';
     const button = `<button>${buttonLabel}</button>`
     renderTooltip('', button);
 
     expect(screen.getByText(buttonLabel)).toBeVisible();
+})
+
+it.only('shows after hovering over owning element', async () => {
+    const text = 'Tooltip text';
+    const buttonLabel = 'Click me';
+    const button = `<button>${buttonLabel}</button>`
+    renderTooltip(text, button);
+
+    // parentElement т.к. на обвертке висит событие
+    await fireEvent.mouseEnter(screen.getByText(buttonLabel).parentElement);
+    expect(screen.getByText(text)).toBeVisible();
+
 })
