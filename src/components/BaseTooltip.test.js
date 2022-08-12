@@ -17,45 +17,62 @@ function renderTooltip(text, element = '') {
     return render(BaseTooltip, options);
 }
 
+function mouseEnterEvent() {
+    return fireEvent.mouseEnter(screen.getByText(buttonLabel).parentElement);
+}
 
-it('renders hidden with specified text', () => {
-    const text = 'Tooltip text';
+function mouseLeaveEvent() {
+    return fireEvent.mouseLeave(screen.getByText(buttonLabel).parentElement);
+}
 
-    renderTooltip(text);
+function mouseClickEvent() {
+    return fireEvent.click(screen.getByText(buttonLabel).parentElement);
+}
 
-    expect(screen.getByText(text)).not.toBeVisible();
+describe('when renders', () => {
+    it('renders hidden with specified text', () => {
+        const text = 'Tooltip text';
+
+        renderTooltip(text);
+
+        expect(screen.getByText(text)).not.toBeVisible();
+    })
+
+    it('renders with target element', () => {
+        renderTooltip('', button);
+
+        expect(screen.getByText(buttonLabel)).toBeVisible();
+    })
 })
 
-it('renders with target element', () => {
-    renderTooltip('', button);
+describe('when shows', () => {
+    it('shows after hovering over owning element', async () => {
+        renderTooltip(text, button);
 
-    expect(screen.getByText(buttonLabel)).toBeVisible();
+        // parentElement т.к. на обвертке висит событие
+        await mouseEnterEvent()
+        expect(screen.getByText(text)).toBeVisible();
+    })
 })
 
-it('shows after hovering over owning element', async () => {
-    renderTooltip(text, button);
+describe('when hides', () => {
+    it('hides after moving cursor away from owning element', async () => {
+        renderTooltip(text, button);
 
-    // parentElement т.к. на обвертке висит событие
-    await fireEvent.mouseEnter(screen.getByText(buttonLabel).parentElement);
-    expect(screen.getByText(text)).toBeVisible();
-})
+        await mouseEnterEvent()
+        expect(screen.getByText(text)).toBeVisible();
 
-it('hides after moving cursor away from owning element', async () => {
-    renderTooltip(text, button);
+        await mouseLeaveEvent();
+        expect(screen.getByText(text)).not.toBeVisible();
+    })
 
-    await fireEvent.mouseEnter(screen.getByText(buttonLabel).parentElement);
-    expect(screen.getByText(text)).toBeVisible();
+    it('hides after clicking owning element', async () => {
+        renderTooltip(text, button);
 
-    await fireEvent.mouseLeave(screen.getByText(buttonLabel).parentElement);
-    expect(screen.getByText(text)).not.toBeVisible();
-})
+        await mouseEnterEvent()
+        expect(screen.getByText(text)).toBeVisible();
 
-it('hides after clicking owning element', async () => {
-    renderTooltip(text, button);
-
-    await fireEvent.mouseEnter(screen.getByText(buttonLabel).parentElement);
-    expect(screen.getByText(text)).toBeVisible();
-
-    await fireEvent.click(screen.getByText(buttonLabel).parentElement);
-    expect(screen.getByText(text)).not.toBeVisible();
+        await mouseClickEvent();
+        expect(screen.getByText(text)).not.toBeVisible();
+    })
 })
