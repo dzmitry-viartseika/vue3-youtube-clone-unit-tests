@@ -21,13 +21,13 @@ test('check renders base checkbox with label', () => {
     render(BaseCheckbox, options);
 
     // then (assets)
-    screen.debug();
+    // screen.debug();
     const checkbox = screen.getByLabelText(labelText);
 
     expect(checkbox.checked).toBe(true);
 })
 
-test.only('check renders base checkbox without label and default value', () => {
+test('check renders base checkbox without label and default value', () => {
     render(BaseCheckbox);
 
     const checkbox = screen.getByRole('checkbox');
