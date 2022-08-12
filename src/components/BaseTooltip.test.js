@@ -1,6 +1,10 @@
 import { render, screen, fireEvent } from '@testing-library/vue';
 import BaseTooltip from './BaseTooltip';
 
+const text = 'Tooltip text';
+const buttonLabel = 'Click me';
+const button = `<button>${buttonLabel}</button>`
+
 function renderTooltip(text, element = '') {
     const options = {
         props: {
@@ -23,17 +27,12 @@ it('renders hidden with specified text', () => {
 })
 
 it('renders with target element', () => {
-    const buttonLabel = 'Click me';
-    const button = `<button>${buttonLabel}</button>`
     renderTooltip('', button);
 
     expect(screen.getByText(buttonLabel)).toBeVisible();
 })
 
 it('shows after hovering over owning element', async () => {
-    const text = 'Tooltip text';
-    const buttonLabel = 'Click me';
-    const button = `<button>${buttonLabel}</button>`
     renderTooltip(text, button);
 
     // parentElement т.к. на обвертке висит событие
@@ -42,9 +41,6 @@ it('shows after hovering over owning element', async () => {
 })
 
 it('hides after moving cursor away from owning element', async () => {
-    const text = 'Tooltip text';
-    const buttonLabel = 'Click me';
-    const button = `<button>${buttonLabel}</button>`
     renderTooltip(text, button);
 
     await fireEvent.mouseEnter(screen.getByText(buttonLabel).parentElement);
@@ -55,9 +51,6 @@ it('hides after moving cursor away from owning element', async () => {
 })
 
 it('hides after clicking owning element', async () => {
-    const text = 'Tooltip text';
-    const buttonLabel = 'Click me';
-    const button = `<button>${buttonLabel}</button>`
     renderTooltip(text, button);
 
     await fireEvent.mouseEnter(screen.getByText(buttonLabel).parentElement);
