@@ -16,7 +16,6 @@ function RenderBaseTextArea(limit = 0) {
 
 it('renders prefilled', () => {
     RenderBaseTextArea(200);
-    screen.debug();
     expect(screen.getByDisplayValue(text));
 });
 
