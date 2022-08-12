@@ -1,6 +1,18 @@
-import {render, screen, fireEvent, waitForElementToBeRemoved} from '@testing-library/vue';
+import { render, screen, fireEvent, waitForElementToBeRemoved } from '@testing-library/vue';
 import TheModalSearchPredictions from './TheModalSearchPredictions';
 
+function renderModal(searchPredictions = [], searchPredictionCategories = []) {
+    const options = {
+        props: {
+            searchPredictions,
+        },
+        data: () => ({
+            searchPredictionCategories,
+        })
+    }
+
+    return render(TheModalSearchPredictions, options);
+}
 
 it('shows search prediction list', () => {
     // arrange
@@ -10,19 +22,15 @@ it('shows search prediction list', () => {
         'Search Prediction 3',
     ];
 
-    const options = {
-        props: {
-            searchPredictions,
-        }
-    }
+    renderModal(searchPredictions);
 
-    // given (act)
-    render(TheModalSearchPredictions, options);
+    searchPredictions.forEach((prediction) => screen.getByText(prediction));
 
-    // assets
-    screen.getByText(searchPredictions[0])
-    screen.getByText(searchPredictions[1])
-    screen.getByText(searchPredictions[2])
+    // or
+
+    // screen.getByText(searchPredictions[0])
+    // screen.getByText(searchPredictions[1])
+    // screen.getByText(searchPredictions[2])
 })
 
 it('shows search prediction category', () => {
@@ -32,17 +40,9 @@ it('shows search prediction category', () => {
         'Violent',
     ];
 
-    const options = {
-        data: () => ({
-            categories,
-        })
-    };
+    renderModal(categories);
 
-    render(TheModalSearchPredictions, options);
-
-    screen.getByText(categories[0]);
-    screen.getByText(categories[1]);
-    screen.getByText(categories[2]);
+    categories.forEach((category) => screen.getByText(category));
 });
 
 it('does not show search predictions if closed', () => {
@@ -52,22 +52,11 @@ it('does not show search predictions if closed', () => {
         'Search Prediction 3',
     ];
 
-    const options = {
-        props: {
-            searchPredictions,
-        }
-    }
-
-    // given (act)
-    render(TheModalSearchPredictions, options);
+    renderModal(searchPredictions);
 
     const button = screen.getByRole('button', {name: 'Cancel'});
     fireEvent.click(button);
-    return waitForElementToBeRemoved([
-        screen.queryByText(searchPredictions[0]),
-        screen.queryByText(searchPredictions[1]),
-        screen.queryByText(searchPredictions[2]),
-    ])
+    return waitForElementToBeRemoved(searchPredictions.map((prediction) => screen.queryByText(prediction)));
 })
 
 it('does not show search predictions categories if closed', () => {
@@ -77,18 +66,9 @@ it('does not show search predictions categories if closed', () => {
         'Violent',
     ];
 
-    const options = {
-        data: () => ({
-            categories,
-        })
-    };
+    renderModal(categories);
 
-    render(TheModalSearchPredictions, options);
     const button = screen.getByRole('button', {name: 'Cancel'});
     fireEvent.click(button);
-    return waitForElementToBeRemoved([
-        screen.queryByText(categories[0]),
-        screen.queryByText(categories[1]),
-        screen.queryByText(categories[2]),
-    ])
+    return waitForElementToBeRemoved(categories.map((category) => screen.queryByText(category)));
 })
