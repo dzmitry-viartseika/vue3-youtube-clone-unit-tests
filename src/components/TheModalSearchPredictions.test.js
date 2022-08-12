@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitForElementToBeRemoved } from '@testing-library/vue';
+import { render, screen, within, fireEvent, waitForElementToBeRemoved } from '@testing-library/vue';
 import TheModalSearchPredictions from './TheModalSearchPredictions';
 
 // вынести определение данных в общую describe - можно сгруппировать схожие сценарии
@@ -47,6 +47,14 @@ describe('when open', () => {
 
         categories.forEach((category) => screen.getByText(category));
     });
+
+    it('shows textarea', () => {
+        renderModal(categories);
+
+        const dialog = screen.getByRole('dialog');
+        // within - органичивает выбор если много на странице textarea's
+        within(dialog).getByRole('textbox');
+    })
 })
 
 
