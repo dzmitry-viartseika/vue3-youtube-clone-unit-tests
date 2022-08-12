@@ -31,13 +31,13 @@ function renderRadio(isChecked = false) {
 it('renders checked with label', () => {
     const isChecked = true;
     renderRadio(isChecked);
-    expect(screen.getByLabelText(label).checked).toBe(isChecked);
+    expect(screen.getByLabelText(label)).toBeChecked();
 })
 
 it('renders unchecked with label', () => {
     const isChecked = false;
     renderRadio(isChecked);
-    expect(screen.getByLabelText(label).checked).toBe(isChecked);
+    expect(screen.getByLabelText(label)).not.toBeChecked();
 })
 
 it('renders with value', () => {

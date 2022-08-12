@@ -17,30 +17,30 @@ function renderIcon(name = null, classes = null) {
 test('renders base icon', () => {
     renderIcon(DEFAULT_ICON);
     const component = screen.getByTestId('base-icon');
-    expect(component.innerHTML).toBeTruthy();
+    expect(component).not.toBeEmptyDOMElement();
 });
 
 test('renders base icon no-exist icon', () => {
     renderIcon();
     const component = screen.getByTestId('base-icon');
-    expect(component.innerHTML).toBeFalsy();
+    expect(component).toBeEmptyDOMElement();
 })
 
 
-test('rendes base icon with default classes', () => {
+test('renders base icon with default classes', () => {
     const defaultClasses = 'w-6 h-6';
 
     renderIcon(DEFAULT_ICON, defaultClasses);
 
     const component = screen.getByTestId('base-icon');
-    expect(component.getAttribute('class')).toBe(defaultClasses);
+    expect(component).toHaveClass(defaultClasses);
 });
 
-test('rendes base icon with custom classes', () => {
+test('renders base icon with custom classes', () => {
     const expectedClasses = 'w-10 h-100';
 
     renderIcon(DEFAULT_ICON, expectedClasses);
 
     const component = screen.getByTestId('base-icon');
-    expect(component.getAttribute('class')).toBe(expectedClasses);
+    expect(component).toHaveClass(expectedClasses);
 });
