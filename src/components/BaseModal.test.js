@@ -2,19 +2,25 @@ import {screen, render, fireEvent, waitFor, waitForElementToBeRemoved } from '@t
 import BaseModal from './BaseModal.vue';
 import icons from '../icons.js';
 
+function renderModal(body = '', footer = '', withCloseButton = false) {
+    const options = {
+        slots: {
+            default: body,
+            footer: footer,
+        },
+        props: {
+            withCloseButton,
+        }
+    }
+
+    return render(BaseModal, options);
+}
+
 test('renders modal with footer and body', () => {
     const bodySlot = 'This is slot of body';
     const footerSlot = 'This is slot of footer';
     // given (arrange)
-    const options = {
-        slots: {
-            default: bodySlot,
-            footer: footerSlot,
-        }
-    }
-
-    // when (act)
-    render(BaseModal, options);
+    renderModal(bodySlot, footerSlot);
 
     // then (assets)
     screen.getByText(bodySlot);
@@ -22,20 +28,14 @@ test('renders modal with footer and body', () => {
 })
 
 test.only('renders close button with conditional', () => {
-    const options = {
-        props: {
-            withCloseButton: true,
-        }
-    }
+    renderModal('', '', true);
 
-    render(BaseModal, options);
-
-    screen.debug();
+    // screen.debug();
     expect(screen.getByTestId('base-icon').innerHTML).toBe(icons['x']);
 })
 
 test('renders close button without conditional', () => {
-    render(BaseModal);
+    renderModal('', '');
 
     screen.debug();
     // get для получения
@@ -46,16 +46,7 @@ test('renders close button without conditional', () => {
 test('modal form should close after click close icon', async () => {
     const bodySlot = 'This is slot of body';
 
-    const options = {
-        props: {
-            withCloseButton: true,
-        },
-        slots: {
-            default: bodySlot,
-        }
-    }
-
-    render(BaseModal, options);
+    renderModal(bodySlot, '', true);
 
     const button = screen.getByTestId('base-modal-button-close');
     // await fireEvent.click(button);
@@ -84,13 +75,7 @@ test('check closing after clicking on overlay', async () => {
 
     const bodySlot = 'This is slot of body';
 
-    const options = {
-        slots: {
-            default: bodySlot,
-        }
-    }
-
-    render(BaseModal, options);
+    renderModal(bodySlot, '');
 
     const overlay = screen.getByTestId('base-modal-overlay');
     fireEvent.click(overlay);
@@ -104,14 +89,17 @@ test('check closing after clicking on overlay', async () => {
 test('check modal when clicking cancel button in the footer side', async () => {
 
     const bodySlot = 'This is slot of body';
+    const footerSlot = `<template #footer="{ close }"> 
+                    <button>Cancel</button>
+                </template>`;
+
+    renderModal(bodySlot, footerSlot);
 
     const options = {
         slots: {
             default: bodySlot,
-            footer:
-                `<template #footer="{ close }"> 
-                    <button>Cancel</button>
-                </template>`
+            footer: footerSlot,
+
         }
     }
 
