@@ -56,20 +56,22 @@ describe('when shows', () => {
 })
 
 describe('when hides', () => {
-    it('hides after moving cursor away from owning element', async () => {
+
+    beforeEach(async () => {
         renderTooltip(text, button);
 
-        await mouseEnterEvent()
+        await mouseEnterEvent();
+    })
+
+    it('hides after moving cursor away from owning element', async () => {
+
         expect(screen.getByText(text)).toBeVisible();
 
         await mouseLeaveEvent();
-        expect(screen.getByText(text)).not.toBeVisible();
+
     })
 
     it('hides after clicking owning element', async () => {
-        renderTooltip(text, button);
-
-        await mouseEnterEvent()
         expect(screen.getByText(text)).toBeVisible();
 
         await mouseClickEvent();
