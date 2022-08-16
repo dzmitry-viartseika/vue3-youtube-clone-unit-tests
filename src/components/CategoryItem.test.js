@@ -1,5 +1,5 @@
 import {render, screen} from '@testing-library/vue';
-import CategoryItem from './CategoryItem.vue';
+import CategoryItem from './CategoryItem';
 
 const category = 'Category';
 
