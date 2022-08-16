@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/vue';
+import { render } from '@testing-library/vue';
 import BaseModalOverlay from './BaseModalOverlay';
 
 it.only('renders with snapshot', () => {
