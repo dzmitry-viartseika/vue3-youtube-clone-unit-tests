@@ -14,13 +14,13 @@ function renderCategoryItem(isActive = false) {
     return render(CategoryItem, options);
 }
 
-it.only('renders with label', () => {
+it('renders with label', () => {
     renderCategoryItem();
 
     expect(screen.getByText(category)).not.toHaveClass('bg-gray-600 text-white');
 })
 
-it.only('renders active', () => {
+it('renders active', () => {
     const isActive = true;
     renderCategoryItem(isActive);
 

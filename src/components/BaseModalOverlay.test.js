@@ -1,7 +1,7 @@
 import { render } from '@testing-library/vue';
 import BaseModalOverlay from './BaseModalOverlay';
 
-it.only('renders with snapshot', () => {
+it('renders with snapshot', () => {
     const { html } = render(BaseModalOverlay);
     const comment = 'A very very long comment';
     const videoObj = {
