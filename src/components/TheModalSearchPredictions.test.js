@@ -1,5 +1,7 @@
 import { render, screen, within, fireEvent, waitForElementToBeRemoved } from '@testing-library/vue';
 import TheModalSearchPredictions from './TheModalSearchPredictions';
+import userEvent from "@testing-library/user-event";
+const user = userEvent.setup()
 
 // вынести определение данных в общую describe - можно сгруппировать схожие сценарии
 
@@ -64,7 +66,7 @@ describe('when close' , () => {
         renderModal(searchPredictions);
 
         const button = screen.getByRole('button', {name: 'Cancel'});
-        fireEvent.click(button);
+        user.click(button);
         return waitForElementToBeRemoved(searchPredictions.map((prediction) => screen.queryByText(prediction)));
     })
 
@@ -72,7 +74,7 @@ describe('when close' , () => {
         renderModal(categories);
 
         const button = screen.getByRole('button', {name: 'Cancel'});
-        fireEvent.click(button);
+        user.click(button);
         return waitForElementToBeRemoved(categories.map((category) => screen.queryByText(category)));
     })
 })

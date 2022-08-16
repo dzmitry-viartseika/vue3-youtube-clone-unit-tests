@@ -1,4 +1,5 @@
 import {screen, render, fireEvent, waitFor, waitForElementToBeRemoved } from '@testing-library/vue';
+// для использования разных событий
 import userEvent from '@testing-library/user-event';
 import BaseModal from './BaseModal.vue';
 import icons from '../icons.js';
@@ -121,8 +122,9 @@ test('check modal when pressing the key of esc', async () => {
 
     render(BaseModal, options);
 
-    const button = screen.getByRole('dialog', { key: 'Esc' });
-    await fireEvent.keyDown(button);
+    // const button = screen.getByRole('dialog', { key: 'Esc' });
+    screen.getByRole('dialog').focus();
+    user.keyboard('{Escape}');
 
     screen.queryByText(bodySlot);
     screen.queryByTestId('base-modal-overlay');

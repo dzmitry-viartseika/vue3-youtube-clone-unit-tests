@@ -1,5 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/vue';
 import BaseTooltip from './BaseTooltip';
+import userEvent from "@testing-library/user-event";
+const user = userEvent.setup()
 
 const text = 'Tooltip text';
 const buttonLabel = 'Click me';
@@ -18,11 +20,11 @@ function renderTooltip(text, element = '') {
 }
 
 function mouseEnterEvent() {
-    return fireEvent.mouseEnter(screen.getByText(buttonLabel).parentElement);
+    return user.hover(screen.getByText(buttonLabel).parentElement);
 }
 
 function mouseLeaveEvent() {
-    return fireEvent.mouseLeave(screen.getByText(buttonLabel).parentElement);
+    return user.unhover(screen.getByText(buttonLabel).parentElement);
 }
 
 function mouseClickEvent() {
